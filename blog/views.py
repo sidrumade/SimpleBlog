@@ -1,12 +1,10 @@
-import django.http
-from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Post
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import FormView, FormMixin
 from .form import EmailForm, CommentForm
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 
 
 
@@ -70,8 +68,7 @@ class PostDetailView(DetailView, FormMixin):
         self.get_context_data().update({'data': 'hello'})
         # Here, we would record the user's interest using the message
         # passed in form.cleaned_data['message']
-        # self.extra_context={'comment_added':True}
-        # self.get_context_data()['comment_added'] = True
+
 
         new_comment = form.save(commit=False)
         new_comment.post = self.get_object()
