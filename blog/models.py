@@ -42,6 +42,6 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ('created',) # always comma at end
-    def __self__(self):
+    def __str__(self):
         return "Comment by {} on {}".format(self.name , self.post)
 

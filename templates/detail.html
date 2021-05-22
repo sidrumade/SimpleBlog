@@ -9,7 +9,7 @@
     <a class="btn btn-primary" href="{% url 'blog:email_form' post_detail.id %}">Share Post</a>
 {% endblock %}
 {% block body_block %}
-
+{{ post }} {{ status }} {{ year }}
     {{ post_detail.body|linebreaks }}
 
     &nbsp;
@@ -22,7 +22,7 @@
 
 
         {% else %}
-        <h3>{{ comments|length }} Comments &nbsp;
+        <h3>{{ comments|length }} Comments &nbsp;</h3>
         {% for comment in comments %}
             <div class="alert alert-success" role="alert">
           <h4>Comment {{ forloop.counter }} by {{ comment.name }} {{ comment.updated }}</h4>
@@ -30,9 +30,14 @@
             </div>
         {% endfor %}
     {% endif %}
-    &nbsp;
-    &nbsp;
-    <h2>Comments</h2>
+    &nbsp;{{ comment_added }}
+    {{ data }}
+{#    &nbsp;{% if comment_added %}#}
+{#    <div class="alert alert-primary" role="alert">#}
+{#      Comment Added#}
+{#     </div>#}
+{#    {% endif %}#}
+{#    <h2>Add Comments</h2>#}
 
 
     <form method="POST">
@@ -51,7 +56,8 @@
             <label for="body" class="form-label">Comment</label>
             {{ form.body }}
         </div>
-        <input class="btn btn-primary" type="submit" value="Submit">
+
+        <input class="btn btn-primary" type="submit" target='_blank' value="Submit">
     </form>
 
 {% endblock %}
