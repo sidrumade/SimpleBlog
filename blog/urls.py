@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:post_id>/form/',EmailFormView.as_view(),name='email_form'),
     #path('<int:post_id>/form/thanks/',TemplateView.as_view(template_name='thanks.html'),name='thanks'),
     re_path('^(.*?)/thanks/$',TemplateView.as_view(template_name='thanks.html'),name='thanks'),
+
 ]

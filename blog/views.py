@@ -3,18 +3,32 @@ from django.views.generic.detail import DetailView
 from .models import Post
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import FormView, FormMixin
-from .form import EmailForm, CommentForm
+from .form import EmailForm, CommentForm, SearchForm
 from django.urls import reverse
+from django.shortcuts import render,redirect
 
+from django.http import Http404
 
 
 # Create your views here.
 
-class PostListView(ListView):
+class PostListView(ListView, FormView):
     model = Post
     context_object_name = 'posts'
     template_name = 'list.html'
     paginate_by = 2  # pagination each page shows 2 posts
+
+    form_class = SearchForm
+
+
+    def post(self, request, *args, **kwargs):
+
+        blog_post=self.model.objects.get(title__contains=request.POST.get('search'))
+        if blog_post is not None:
+            return redirect(blog_post.get_absolute_url()) #reditect joing host+given url
+        else:
+            raise Http404('Post not found')
+
 
 
 class PostDetailView(DetailView, FormMixin):
@@ -43,7 +57,7 @@ class PostDetailView(DetailView, FormMixin):
 
     def post(self, request, *args, **kwargs):
 
-        self.object = self.get_object()
+        self.object = self.get_object() #always requird here
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
@@ -56,18 +70,10 @@ class PostDetailView(DetailView, FormMixin):
         comments = self.get_object().comments.filter(active=True)
         context['comments'] = comments
 
-        # context['post'] = self.kwargs['post']
-        # context['status'] = 'published'
-        # context['year'] = self.kwargs['year']
-        # context['month'] = self.kwargs['month']
-        # context['day'] = self.kwargs['day']
         return context
-
 
     def form_valid(self, form):
         self.get_context_data().update({'data': 'hello'})
-        # Here, we would record the user's interest using the message
-        # passed in form.cleaned_data['message']
 
 
         new_comment = form.save(commit=False)
